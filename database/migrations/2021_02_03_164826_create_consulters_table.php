@@ -15,6 +15,18 @@ class CreateConsultersTable extends Migration
     {
         Schema::create('consulters', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('idPatient');
+            $table->foreign('idPatient')
+                  ->references('idPatient')
+                  ->on('patients')
+                  ->onDelete('restrict')
+                  ->onUpdate('restrict');
+            $table->unsignedBigInteger('idStructure');
+            $table->foreign('idStructure')
+                  ->references('idStructure')
+                  ->on('structures')
+                  ->onDelete('restrict')
+                  ->onUpdate('restrict');
             $table->timestamps();
         });
     }

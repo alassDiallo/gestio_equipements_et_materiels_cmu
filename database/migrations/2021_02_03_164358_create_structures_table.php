@@ -14,11 +14,11 @@ class CreateStructuresTable extends Migration
     public function up()
     {
         Schema::create('structures', function (Blueprint $table) {
-            $table->id();
+            $table->id('idStructure');
             $table->string('reference')->unique();
             $table->string('nom');
             $table->string('adresse');
-            $table->string('telephone');
+            $table->string('telephone')->unique();
             $table->string('region');
             $table->timestamps();
         });

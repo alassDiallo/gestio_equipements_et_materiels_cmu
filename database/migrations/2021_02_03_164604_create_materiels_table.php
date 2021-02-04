@@ -14,8 +14,14 @@ class CreateMaterielsTable extends Migration
     public function up()
     {
         Schema::create('materiels', function (Blueprint $table) {
-            $table->id();
-            $table->string('reference');
+            $table->id('idMateriel');
+            $table->string('reference')->unique();
+            $table->unsignedBigInteger('idVolontaire')->nullable();
+            $table->foreign('idVolontaire')
+                  ->references('idVolontaire')
+                  ->on('volontaires')
+                  ->onDelete('restrict')
+                  ->onUpdate('restrict');
             $table->string('libelle');
             $table->string('type');
             $table->double('prix');

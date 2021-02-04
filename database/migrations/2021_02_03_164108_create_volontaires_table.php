@@ -14,16 +14,23 @@ class CreateVolontairesTable extends Migration
     public function up()
     {
         Schema::create('volontaires', function (Blueprint $table) {
-            $table->id();
+            $table->id('idVolontaire');
             $table->string('reference',10)->unique();
             $table->String('nom');
             $table->String('prenom');
             $table->date('dateDeNaissance');
             $table->string('lieuDeNaissance');
             $table->string('adresse');
-            $table->string('telephone',9);
+            $table->string('telephone',9)->unique();
             $table->string('email');
-            $table->string('numeroCIN');
+            $table->string('numeroCIN')->unique();
+            $table->boolean('etat');
+            $table->unsignedBigInteger('idStructure');
+            $table->foreign('idStructure')
+                  ->references('idStructure')
+                  ->on('structures')
+                  ->onDelete('restrict')
+                  ->onUpdate('restrict');
             $table->timestamps();
         });
     }

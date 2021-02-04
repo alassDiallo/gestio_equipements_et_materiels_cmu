@@ -14,12 +14,12 @@ class CreateFournisseursTable extends Migration
     public function up()
     {
         Schema::create('fournisseurs', function (Blueprint $table) {
-            $table->id();
-            $table->string('referenceFournisseur');
+            $table->id('idFournisseur');
+            $table->string('referenceFournisseur')->unique();
             $table->string('nom');
             $table->string('prenom');
-            $table->string('telephone',12);
-            $table->string('email');
+            $table->string('telephone',12)->unique();
+            $table->string('email')->unique();
             $table->string('adresse');
             $table->timestamps();
         });

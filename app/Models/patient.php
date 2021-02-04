@@ -9,4 +9,21 @@ class patient extends Model
 {
     use HasFactory;
     protected $fillable = ['nom','prenom','adresse','telephone','dateDeNaissance','lieuDeNaissance','sexe','numeroCIN','referencePatient'];
+
+   public function etRouteKeyName(){
+
+    return 'referencePatient';
+   }
+   
+    public function structures(){
+
+        return $this->belongsToMany('App\Models\structure','consulters')
+                                    ->withTimestamps();
+    }
+
+    public function consultations(){
+
+        return $this->hasMany('App\Models\consultation')
+                                    ->withTimestamps();
+    }
 }

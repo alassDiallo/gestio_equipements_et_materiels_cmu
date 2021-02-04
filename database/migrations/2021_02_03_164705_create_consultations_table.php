@@ -14,12 +14,18 @@ class CreateConsultationsTable extends Migration
     public function up()
     {
         Schema::create('consultations', function (Blueprint $table) {
-            $table->id();
-            $table->string('referenceConsultation');
+            $table->id('idConsultation');
+            $table->string('referenceConsultation')->unique();
             $table->date('date');
             $table->double('prixConsultation');
             $table->string('nomMedecin');
             $table->string('telephoneMedecin',12);
+            $table->unsignedBigInteger('idPatient');
+            $table->foreign('idPatient')
+                  ->references('idPatient')
+                  ->on('patients')
+                  ->onDelete('restrict')
+                  ->onUpdate('restrict');
             $table->timestamps();
         });
     }

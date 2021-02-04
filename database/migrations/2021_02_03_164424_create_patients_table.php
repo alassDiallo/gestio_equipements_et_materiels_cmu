@@ -14,8 +14,8 @@ class CreatePatientsTable extends Migration
     public function up()
     {
         Schema::create('patients', function (Blueprint $table) {
-            $table->id();
-            $table->string('referencePatient',12);
+            $table->id('idPatient');
+            $table->string('referencePatient',12)->unique();
             $table->string('nom');
             $table->string('prenom');
             $table->date('dateDeNaissance');
@@ -23,7 +23,8 @@ class CreatePatientsTable extends Migration
             $table->string('sexe');
             $table->string('adresse');
             $table->string('telephone',9);
-            $table->string('numeroCIN',14);
+            $table->boolean('etat');
+            $table->string('numeroCIN',14)->unique();
             $table->timestamps();
         });
     }

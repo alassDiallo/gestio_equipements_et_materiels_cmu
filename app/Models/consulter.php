@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class consulter extends Model
 {
     use HasFactory;
+
 }

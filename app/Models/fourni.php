@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class fourni extends Model
 {
     use HasFactory;
+    protected $fillable = ['date','quantite'];
 }

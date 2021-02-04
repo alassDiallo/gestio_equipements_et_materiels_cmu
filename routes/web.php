@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+//use App\Http\Controllers;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::resource('volontaire',ControllerVolontaire::class);
+Route::resource('volontaire',App\Http\Controllers\ControllerVolontaire::class);
 
 Auth::routes();
 

@@ -17,7 +17,7 @@ class structure extends Model
     }
 
     public function patients(){
-        return $this->BelongsToMany(' App\Models\patient','consulters')
+        return $this->BelongsToMany(' App\Models\patient','consulters','idStructure','idPatient')
                                     ->withTimestamps();
     }
 

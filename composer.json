@@ -17,7 +17,8 @@
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
-        "livewire/livewire": "^2.0"
+        "livewire/livewire": "^2.0",
+        "yajra/laravel-datatables-oracle": "^9.15"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -42,7 +43,8 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files":["app/helpers/helper.php"]
     },
     "autoload-dev": {
         "psr-4": {

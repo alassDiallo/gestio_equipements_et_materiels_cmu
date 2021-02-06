@@ -19,11 +19,11 @@ class volontaire extends Model
     
     public function structure(){
 
-        return $this->belongsTo('App\Models\structure');
+        return $this->belongsTo('App\Models\structure','idStructure');
     }
 
     public function materiels(){
 
-        return $this->hasMany('App\Models\materiel');
+        return $this->hasMany('App\Models\materiel','idVolontaire');
     }
 }

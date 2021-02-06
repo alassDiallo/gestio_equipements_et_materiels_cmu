@@ -18,7 +18,7 @@ class fournisseur extends Model
 
     public function materiels(){
 
-        return $this->belongsToMany('App\Models\materiel','fournis')
+        return $this->belongsToMany('App\Models\materiel','fournis','idFournisseur','idMateriel')
                                     ->withPivot('quantite','date')
                                     ->withTimestamps();
     }

@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\structure;
+use DataTables;
+use Validator;
 
 use Illuminate\Http\Request;
 
@@ -13,7 +16,33 @@ class ControllerStructure extends Controller
      */
     public function index()
     {
-        //
+        $structure = structure::all();
+       // dd($structure->count());
+        //dd(response()->json($structure));
+        $d=array();
+        $i=1;
+      foreach($structure as $t){
+        $row=array();
+        $row[]=$i++;
+        $row[]=$t->reference;
+        $row[]=$t->nom;
+        $row[]=$t->adresse;
+        $row[]=$t->telephone;
+        $row[]=$t->region;
+        $row[]='<a class="btn  btn-sm btn-primary" href="javascript:void();" title="modifier" onclick="modifier('."'".$t->reference."'".');">modifier</a>
+                <a class="btn  btn-sm btn-danger" href="javascript:void();" title="supprimer" onclick="supprimer('."'".$t->reference."'".');">supprimer</a>';
+        $d[]=$row;
+      }
+$data = array(
+    "draw"=>1,
+    "recordsTotal"=>count($d),
+    "recordsFiltered"=>count($d),
+    "data"=>$d
+);
+return response()->json($data);
+       
+
+     // return view('structure.accueil_structure');
     }
 
     /**
@@ -21,6 +50,20 @@ class ControllerStructure extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function getStructures(Request $request, structure $structure)
+    {
+        $data = $structure::all();
+        return \DataTables::of($data)
+            ->addColumn('Actions', function($data) {
+                return '<button type="button" class="btn btn-success btn-sm" id="getEditArticleData" data-id="'.$data->id.'">Edit</button>
+                    <button type="button" data-id="'.$data->id.'" data-toggle="modal" data-target="#DeleteArticleModal" class="btn btn-danger btn-sm" id="getDeleteId">Delete</button>';
+            })
+            ->rawColumns(['Actions'])
+            ->make(true);
+           // return response()->json();
+    }
+
     public function create()
     {
         //
@@ -34,7 +77,26 @@ class ControllerStructure extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $rules = [
+            "nom"=>"required | string | min : 2",
+           "adresse"=>"required | string | min : 3",
+           "telephone"=>"required | digits:9| unique:structures",
+            "region"=>"required"
+        ];
+        $error = Validator::make($request->all(),$rules);
+        if($error->fails()){
+            return response()->json(['error'=>$error->errors()]);
+        }
+        //return response()->json($request);
+        structure::create([
+            "nom"=>$request->nom,
+            "adresse"=>$request->adresse,
+            "telephone"=>$request->telephone,
+            "region"=>$request->region,
+            "reference"=>referenceStructure()
+        ]);
+
+       return response()->json(['success'=>'enregistrement effectuer avec succé']);
     }
 
     /**
@@ -45,7 +107,8 @@ class ControllerStructure extends Controller
      */
     public function show($id)
     {
-        //
+        $data = structure::where('reference',$id)->get();
+        return response()->json($data);
     }
 
     /**
@@ -68,7 +131,26 @@ class ControllerStructure extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $rules = [
+            "nom"=>"required | string | min : 2",
+           "adresse"=>"required | string | min : 3",
+           "telephone"=>"required | digits:9| unique:structures",
+            "region"=>"required"
+        ];
+        $error = Validator::make($request->all(),$rules);
+        if($error->fails()){
+            return response()->json(['error'=>$error->errors()]);
+        }
+        //return response()->json($request);
+        structure::where('reference',$id)->update([
+            "nom"=>$request->nom,
+            "adresse"=>$request->adresse,
+            "telephone"=>$request->telephone,
+            "region"=>$request->region,
+            
+        ]);
+
+       return response()->json(['success'=>'enregistrement effectuer avec succé']);
     }
 
     /**
@@ -79,6 +161,7 @@ class ControllerStructure extends Controller
      */
     public function destroy($id)
     {
-        //
+        structure::where('reference',$id)->delete();
+        return response()->json(["donnee"=>"suppression reussi"]);
     }
 }

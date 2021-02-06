@@ -18,6 +18,6 @@ class consultation extends Model
 
     public function patient(){
 
-        return $this->belongsTo('App\Models\patient');
+        return $this->belongsTo('App\Models\patient','idPatient');
     }
 }

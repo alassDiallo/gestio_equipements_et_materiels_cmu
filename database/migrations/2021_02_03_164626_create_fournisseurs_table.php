@@ -17,7 +17,6 @@ class CreateFournisseursTable extends Migration
             $table->id('idFournisseur');
             $table->string('referenceFournisseur')->unique();
             $table->string('nom');
-            $table->string('prenom');
             $table->string('telephone',12)->unique();
             $table->string('email')->unique();
             $table->string('adresse');

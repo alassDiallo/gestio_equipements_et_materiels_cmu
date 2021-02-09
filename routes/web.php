@@ -19,6 +19,8 @@ Route::get('/', function () {
 });
 
 Route::resource('volontaire',App\Http\Controllers\ControllerVolontaire::class);
+Route::resource('materiel',App\Http\Controllers\ControllerMateriel::class);
+Route::resource('fournisseur',App\Http\Controllers\ControllerFournisseur::class);
 
 Auth::routes();
 

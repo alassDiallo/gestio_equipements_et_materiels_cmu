@@ -35,7 +35,7 @@
     var save;
     //var erreur_nom=false;
     $(document).ready(function(){
-     table =  $('#table').DataTable({
+    /* table =  $('#table').DataTable({
          //"serverSide":true,
         // "proccessing":true,
         "ajax":{
@@ -56,34 +56,39 @@
              url:"/js/DataTables/French.json"
          }
 
-     });
+     });*/
         // init datatable.
-       /* var dataTable = $('.datatable').DataTable({
+       var table = $('#table').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             pageLength: 5,
             // scrollX: true,
             "order": [[ 0, "desc" ]],
-            ajax: '{{ route('get-structure') }}',
+            ajax: "{{ route('structure.index') }}",
             columns: [
                 {data: 'idStructure'},
-                {data: 'nom'},
                 {data: 'reference'},
+                {data: 'nom'},
                 {data: 'adresse'},
                 {data: 'telephone'},
                 {data: 'region'},
-                {data: 'Actions', name: 'Actions',orderable:false,serachable:false,sClass:'text-center'},
-            ]
-        });*/
-
+                {data: 'action', name: 'action',orderable:false,serachable:false,sClass:'text-center'},
+            ],
+            language:{
+             url:"/js/DataTables/French.json"
+         }
+        });
+        
+        
      $('#telephone').on('keypress',function(e){
          console.log(e.keyCode);
          if(e.keyCode<48 || e.keyCode>57){
              return false;
          }
-     })
+     });
     })
+    var ref;
     function ajouter(){
         save="ajouter";
         
@@ -92,15 +97,35 @@
 
     }
 
-    function reload(){
+    /*function reload(){
         table.ajax.reload(null,false);
+    }*/
+    function reload(){
+        $('#table').DataTable().ajax.reload();
     }
 
     function enregistrer(e){
        e.preventDefault();
+       var url;
+       var meth;
+
+       if(save==="modifier"){
+         url="http://localhost:8000/structure/"+id;
+         meth="PUT";
+       }
+       else{
+           url = "{{ route('structure.store') }}";
+           meth="POST";
+       }
+       $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+       
        $.ajax({
-           url:"http://localhost:8000/structure",
-           type:"POST",
+           url:url,
+           type:meth,
            data:$('#form').serialize(),
            dataType:"JSON",
            success:function(data){
@@ -108,36 +133,36 @@
                 
                 if(data.error.nom){
                     console.log(data.error.nom[0]);
-                    $('#erreur_nom').addClass("is-invalid");
+                    $('#nom').addClass("is-invalid");
                     $('#erreur_nom').text(data.error.nom[0]);
                 }
                 else{
-                    $('#erreur_nom').removeClass("is-invalid");
+                    $('#nom').removeClass("is-invalid");
                     $('#erreur_nom').text("");
                 }
                 if(data.error.adresse){
-                    $('#erreur_adresse').addClass("is-invalid");
+                    $('#adresse').addClass("is-invalid");
                     $('#erreur_adresse').text(data.error.adresse[0]);
                 }
                 else{
-                    $('#erreur_adresse').removeClass("is-invalid");
+                    $('#adresse').removeClass("is-invalid");
                     $('#erreur_adresse').text("");
                 }
                 if(data.error.telephone){
-                    $('#erreur_telephone').addClass("is-invalid");
+                    $('#telephone').addClass("is-invalid");
                     $('#erreur_telephone').text(data.error.telephone[0]);
                 }
                 else{
-                    $('#erreur_telephone').removeClass("is-invalid");
+                    $('#telephone').removeClass("is-invalid");
                     $('#erreur_telephone').text("");
                 }
 
                 if(data.error.region){
-                    $('#erreur_region').addClass("is-invalid");
+                    $('#region').addClass("is-invalid");
                     $('#erreur_region').text(data.error.region[0]);
                 }
                 else{
-                    $('#erreur_region').removeClass("is-invalid");
+                    $('#region').removeClass("is-invalid");
                     $('#erreur_region').text("");
                 }
                 console.log(data.error);
@@ -155,7 +180,8 @@
 
     function modifier(ref){
       
-        save="modifer";
+      
+        save="modifier";
         $('.modal-title').text("Modifer la structure");
         $('#form')[0].reset();
         //alert();
@@ -170,6 +196,7 @@
                $('#adresse').val(data[0].adresse);
                $('#telephone').val(data[0].telephone);
                $('#region').val(data[0].region);
+               id=data[0].reference;
                $('#modal').modal('show');
             },
             error:function(xhr,statusText,error){
@@ -180,10 +207,16 @@
     }
 
     function supprimer(ref){
-       
+       alert(ref);
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
        $.ajax({
            url:"{{ route('structure.destroy',['structure'=>"+ref+"]) }}",
-           type:"GET",
+           method:"DELETE",
            dataType:"JSON",
            success:function(data){
                console.log(data.donnee);

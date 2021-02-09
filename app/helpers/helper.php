@@ -11,3 +11,13 @@ function referenceStructure(){
 }
 
 }
+
+if(! function_exists("referenceVolontaire")){
+    function referenceVolontaire(){
+        $ref = rand(100000,1000000)."VOL";
+        if(volontaire::where('reference',$ref)->count() >0)
+        return referenceVolontaire();
+        return $ref;
+    }
+    
+    }

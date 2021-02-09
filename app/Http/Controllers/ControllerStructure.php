@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\structure;
 use DataTables;
 use Validator;
+use Illuminate\Validation\Rule;
 
 use Illuminate\Http\Request;
 
@@ -14,9 +15,26 @@ class ControllerStructure extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $structure = structure::all();
+        if($request->ajax()){
+            $data = structure::all();
+
+            return \DataTables::of($data)
+                                ->addIndexColumn()
+                                ->addColumn('action',function($data){
+                                $btn = '<a class="btn  btn-sm btn-primary" href="javascript:void();" data-toggle="tooltip" data-id="'.$data->id.'" data-original-title="modifier" onclick="modifier('."'".$data->reference."'".')">modifier</a>
+                                <a class="btn  btn-sm btn-danger" href="javascript:void();" data-toggle="tooltip" data-id="'.$data->id.'" data-original-title="supprimer" onclick="supprimer('."'".$data->reference."'".')">supprimer</a>';
+
+                                return $btn;
+                                })
+                                ->rawColumns(['action'])
+                                ->make(true);
+
+                                //return view('structure.accueil_structure',compact($data));
+           
+        }
+       /* $structure = structure::all();
        // dd($structure->count());
         //dd(response()->json($structure));
         $d=array();
@@ -39,7 +57,7 @@ $data = array(
     "recordsFiltered"=>count($d),
     "data"=>$d
 );
-return response()->json($data);
+return response()->json($data);*/
        
 
      // return view('structure.accueil_structure');
@@ -147,6 +165,7 @@ return response()->json($data);
             "adresse"=>$request->adresse,
             "telephone"=>$request->telephone,
             "region"=>$request->region,
+            //Rule::unique('structures')->ignore($id)
             
         ]);
 
@@ -159,6 +178,7 @@ return response()->json($data);
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
         structure::where('reference',$id)->delete();

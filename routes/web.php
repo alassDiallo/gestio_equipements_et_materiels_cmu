@@ -22,8 +22,8 @@ Route::get('/str',function(){
     return view('structure.accueil_structure');
 });
 Route::resource('volontaire',App\Http\Controllers\ControllerVolontaire::class);
-Route::get('get-structure',[App\Http\Controllers\ControllerStructure::class,'get-structure'])->name("get-structure");
 Route::resource('structure',App\Http\Controllers\ControllerStructure::class);
+Route::resource('volontaire',App\Http\Controllers\ControllerVolontaire::class);
 
 Auth::routes();
 

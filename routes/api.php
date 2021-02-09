@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\structure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/a',function(){
-    return response()->json(['assane']);
+    $structure=structure::all();
+    return response()->json($structure);
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

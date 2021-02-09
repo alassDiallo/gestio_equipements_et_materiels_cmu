@@ -9,10 +9,10 @@
     </head>
     <body>
         <div class="row">
-            <div class="col-md-3">
-                <h1>Bienvenue dans le template de l'utilsateur de lika</h1>
+            <div class="col-md-3" style="background: blue;hight:100%;">
+                
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9 mt-4">
                  @yield('content')
             </div>
         </div>

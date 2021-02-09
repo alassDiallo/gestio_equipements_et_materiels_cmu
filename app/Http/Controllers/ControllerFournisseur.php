@@ -2,83 +2,84 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\fournisseur;
 use Illuminate\Http\Request;
 
 class ControllerFournisseur extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+         $fournisseurs = fournisseur::all();
+
+        return ( view('fournisseur.acceuil',compact('fournisseurs')));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+
+         return (view('fournisseur.create'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         //
+         $request->validate([
+            'referenceFournisseur' => 'required',
+            'nom' => 'required',
+            'telephone' => 'required',
+            'email' => 'required',
+            'adresse' => 'required'
+
+        ]);
+         $fournisseur = fournisseur::create($request->all());
+         return redirect()->route('fournisseur.index')
+            ->with('success', 'Fournisseur crée avec succès.');
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+    public function show($idFournisseur)
     {
         //
+        $fournisseur=fournisseur::find($idFournisseur);
+        return (view('fournisseur.show',compact('fournisseur')));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+    public function edit($idFournisseur)
     {
         //
+        $fournisseur=fournisseur::find($idFournisseur);
+
+         return (view('fournisseur.edit',compact('fournisseur')));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update( $idFournisseur,Request $request)
     {
-        //
+        $request->validate([
+            'referenceFournisseur' => 'required',
+            'nom' => 'required',
+            'telephone' => 'required',
+            'email' => 'required',
+            'adresse' => 'required'
+
+        ]);
+        $fournisseur = fournisseur::find($idFournisseur);
+         $fournisseur->update($request->all());
+         return redirect()->route('fournisseur.index')
+            ->with('success', 'Fournisseur modifié avec succès.');
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy($idFournisseur)
     {
         //
+         $fournisseur=fournisseur::find($idFournisseur);
+         $fournisseur->delete();
+        // $fournisseur->materiels()->detach();
+         return redirect()->route('fournisseur.index')
+            ->with('success', 'Fournisseur supprimé avec succès .');
     }
 }

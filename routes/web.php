@@ -24,6 +24,8 @@ Route::get('/str',function(){
 Route::resource('volontaire',App\Http\Controllers\ControllerVolontaire::class);
 Route::resource('structure',App\Http\Controllers\ControllerStructure::class);
 Route::resource('volontaire',App\Http\Controllers\ControllerVolontaire::class);
+Route::resource('materiel',App\Http\Controllers\ControllerMateriel::class);
+Route::resource('fournisseur',App\Http\Controllers\ControllerFournisseur::class);
 
 Auth::routes();
 

@@ -26,4 +26,5 @@ class materiel extends Model
                                     ->withPivot('date','quantite')
                                     ->withTimestamps();
     }
+    protected $primaryKey ='idMateriel';
 }
